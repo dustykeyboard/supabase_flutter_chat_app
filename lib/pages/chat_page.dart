@@ -118,6 +118,7 @@ class _MessageBar extends StatefulWidget {
 
 class _MessageBarState extends State<_MessageBar> {
   late final TextEditingController _textController;
+  late FocusNode textFocusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +134,9 @@ class _MessageBarState extends State<_MessageBar> {
                   keyboardType: TextInputType.text,
                   maxLines: null,
                   autofocus: true,
+                  focusNode: textFocusNode,
                   controller: _textController,
+                  onFieldSubmitted: (value) => _submitMessage(),
                   decoration: const InputDecoration(
                     hintText: 'Type a message',
                     border: InputBorder.none,
@@ -157,11 +160,13 @@ class _MessageBarState extends State<_MessageBar> {
   void initState() {
     _textController = TextEditingController();
     super.initState();
+    textFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    textFocusNode.dispose();
     super.dispose();
   }
 
@@ -181,6 +186,7 @@ class _MessageBarState extends State<_MessageBar> {
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     }
+    textFocusNode.requestFocus();
   }
 }
 
